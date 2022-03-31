@@ -1,0 +1,63 @@
+---
+title: "Advanced Dashboarding"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill #scroll -
+    social: ["menu"]
+    source_code: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+#install.packages("palmerpenguins")
+library(palmerpenguins)
+library(plotly)
+library(DT)
+library(fontawesome)
+data("penguins")
+```
+
+Plots
+===========================================================
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+a = penguins %>% ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species))+
+  geom_point()
+ggplotly(a)
+# htmlwidgets.org -> leaflet
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+penguins %>% ggplot(aes(x = body_mass_g, y= sex, fill = sex))+
+  geom_boxplot()
+```
+
+### Chart C
+
+```{r}
+penguins %>% ggplot(aes(x = flipper_length_mm, fill = species))+ 
+  geom_histogram()+
+  facet_grid(~species)
+```
+
+Data
+==========================================================
+
+```{r}
+penguins %>% datatable(extensions = "Buttons",
+                       options = list(dom = "Blfrtip",
+                                      buttons = c("copy", "csv", "excel", "pdf", "print")))
+# use datatables.net to find all the different options and buttons
+```
