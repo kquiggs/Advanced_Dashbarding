@@ -1,17 +1,19 @@
 ---
-title: "Advanced Dashboarding"
+title: "Advanced Dashboarding2"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: columns
-    vertical_layout: fill #scroll -
+    orientation: row
+    vertical_layout: fill
     social: ["menu"]
     source_code: embed
+    theme:
+      version: 4
+      bootswatch: sandstone
 ---
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
-#install.packages("palmerpenguins")
 library(palmerpenguins)
 library(plotly)
 library(DT)
@@ -19,45 +21,63 @@ library(fontawesome)
 data("penguins")
 ```
 
-Plots
-===========================================================
 
-Column {data-width=650}
------------------------------------------------------------------------
+Plots {data-navmenu="Pages"}
+========================================================================
 
-### Chart A
+sidebar {.sidebar}
+------------------------------------------------------------------------
+<!-- this is a comment
+-->
+### Penguin Stats
 
+The number of penguins in the data is `r nrow(penguins)`
+
+Row
+------------------------------------------------------------------------
+
+### Number of Penguins
 ```{r}
-a = penguins %>% ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species))+
-  geom_point()
-ggplotly(a)
-# htmlwidgets.org -> leaflet
+valueBox(nrow(penguins), icon = "fa-linux") ## fontawesome icon
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
+
+## Column {.tabset}
+------------------------------------------------------------------------
+
+### Scatter Plot of bill length vs. bill depth (mm)
+
+```{r}
+## htmlwidgets.org - lots of options for cool plotting
+a = penguins %>% ggplot(aes(x = bill_length_mm, y = bill_depth_mm, color = species))+
+  geom_point() # scatterplot
+ggplotly(a)
+```
+
 
 ### Chart B
 
 ```{r}
-penguins %>% ggplot(aes(x = body_mass_g, y= sex, fill = sex))+
+penguins %>% ggplot(aes(x = body_mass_g, y = sex, fill = sex))+
   geom_boxplot()
 ```
 
 ### Chart C
 
 ```{r}
-penguins %>% ggplot(aes(x = flipper_length_mm, fill = species))+ 
+penguins %>% ggplot(aes(x = flipper_length_mm, fill = species))+
   geom_histogram()+
-  facet_grid(~species)
+  facet_wrap(~species)
 ```
 
-Data
-==========================================================
+Data {data-navmenu="Pages"}
+========================================================================
 
 ```{r}
+## datatables.net - see more options
 penguins %>% datatable(extensions = "Buttons",
                        options = list(dom = "Blfrtip",
-                                      buttons = c("copy", "csv", "excel", "pdf", "print")))
-# use datatables.net to find all the different options and buttons
+                                      buttons = c("copy", "csv", "excel", "pdf", "print"))) 
+                                #button, length, f__, row, table, i__, page
 ```
+
